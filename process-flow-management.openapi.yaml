@@ -1,0 +1,2828 @@
+openapi: 3.0.3
+info:
+  title: Process Flow Management API
+  version: 1.5.0
+  description: >-
+    ## TMF API Reference : TMF 701 - ProcessFlow API 4.0.0
+      ### Release : 19.0 - June 2019
+      
+      ProcessFlowManagement API provides ProcessFlow & TaskFlow management capabilities. This API allows to:
+      
+      - Create a Process Flow (an instance of a processFlow type).
+      
+      - Get information about next task flow to be achieved in this process.
+      
+      - Provide information to complete a taskflow (via an update information).
+      
+      - Get information about processFlow and taskFlow execution in progress.
+      
+      #### ProcessFlow resource
+      
+      A process flow resource allows to manage a ProcessFlow usually managed on a bmpn tool (but could be hardcoded). A ProcessFlow is triggered by an event and will manage a list of TaskFlow(s).
+      
+      ProcessFlow API performs the following operations on a ProcessFlow:
+      
+      - Retrieval of a ProcessFlow or a collection of ProcessFlow depending on filter criteria
+      
+      - Creation of a ProcessFlow (from a processFlow type)
+      
+      - Deletion of a ProcessFlow (for administration purposes)
+      
+      - Notification of events on ProcessFlow .
+      
+      #### TaskFlow resource
+      
+      A TaskFlow is one specific task of a process. A TaskFlow may need human intervention to be completed (data capture). TaskFlow is a ProcessFlow subResource (A TaskFlow cannot be independant from a ProcessFlow). A TaskFlow is an instance of a ProcessFlow type.
+      
+      Process Flow API performs the following operations on a TaskFlow:
+      
+      - Retrieval of a TaskFlow or a collection of TaskFlow (for a ProcesFlow) depending on filter criteria
+      
+      - Partial update of a TaskFlow
+      
+      - Notification of events on TaskFlow
+  contact:
+    name: M-API Team
+    url: https://confluence.dtoneapp.telekom.net/pages/viewpage.action?pageId=9834338
+    email: HAL.Team@t.ht.hr
+  license:
+    name: Proprietary license
+externalDocs:
+  url: https://confluence.dtoneapp.telekom.net/display/HAL/Process+Flow+Management
+  description: Link to Confluence HAL Process Flow Management API documentation
+servers:
+  - url: localhost:8026/processFlowManagement/v1
+    description: HAL Mock server
+security:
+  - accessTokenJWT: []
+  - accessTokenOpaque: []
+  - apiKey: []
+tags:
+  - name: ProcessFlows
+    description: ""
+  - name: TaskFlows
+    description: ""
+  - name: Hubs
+    description: ""
+  - name: Notification listeners (client side)
+    description: ""
+paths:
+  /processFlows:
+    get:
+      tags:
+        - ProcessFlows
+      description: This operation list or find ProcessFlow entities
+      summary: List or find ProcessFlow objects
+      operationId: getProcessFlows
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProcessFlow"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Content-Range:
+              $ref: "#/components/headers/X-Content-Range"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    post:
+      tags:
+        - ProcessFlows
+      summary: Creates a ProcessFlow
+      description: This operation creates a ProcessFlow entity
+      operationId: createProcessFlow
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      requestBody:
+        required: true
+        description: The ProcessFlow to be created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcessFlow"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcessFlow"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+  "/processFlows/{id}":
+    get:
+      tags:
+        - ProcessFlows
+      description: This operation retrieves a ProcessFlow entity. Attribute selection
+        is enabled for all first level attributes.
+      summary: Retrieves a process flow by ID
+      operationId: getProcessFlowsById
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcessFlow"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    delete:
+      tags:
+        - ProcessFlows
+      description: This operation deletes a ProcessFlow entity.
+      summary: Deletes a ProcessFlow
+      operationId: deleteProcessFlowById
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "204":
+          description: Deleted
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    parameters:
+      - name: id
+        schema:
+          type: string
+        description: Identifier of the ProcessFlow
+        in: path
+        required: true
+  "/processFlows/{processFlowId}/taskFlows":
+    get:
+      tags:
+        - TaskFlows
+      description: This operation list or find TaskFlow entities
+      summary: List or find TaskFlow objects
+      operationId: getTaskFlows
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/size"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskFlow"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Content-Range:
+              $ref: "#/components/headers/X-Content-Range"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    parameters:
+      - name: processFlowId
+        schema:
+          type: string
+        description: Identifier of the ProcessFlow
+        in: path
+        required: true
+  "/processFlows/{processFlowId}/taskFlows/{id}":
+    get:
+      tags:
+        - TaskFlows
+      description: This operation retrieves a TaskFlow entity. Attribute selection is
+        enabled for all first level attributes.
+      summary: Retrieves a task flow by ID
+      operationId: getTaskFlowById
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskFlow"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    patch:
+      tags:
+        - TaskFlows
+      summary: Updates partially a TaskFlow
+      description: This operation updates partially a TaskFlow entity.
+      operationId: updateTaskFlow
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fieldsPatch"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      requestBody:
+        required: true
+        description: The TaskFlow to be patched
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskFlow"
+          application/json-patch-query+json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/JSONPatch"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskFlow"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    parameters:
+      - name: processFlowId
+        schema:
+          type: string
+        description: Identifier of the ProcessFlow
+        in: path
+        required: true
+      - name: id
+        schema:
+          type: string
+        description: Identifier of the TaskFlow
+        in: path
+        required: true
+  /hubs:
+    post:
+      tags:
+        - Hubs
+      summary: Register a listener
+      description: This operation register a Listener.
+      operationId: registerListener
+      requestBody:
+        required: true
+        description: The Listener to be created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Hub"
+      parameters:
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hub"
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+  "/hubs/{id}":
+    delete:
+      tags:
+        - Hubs
+      description: This operation deregister a Listener.
+      summary: Unregister a listener
+      operationId: deregisterListenerById
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Request-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      responses:
+        "204":
+          description: Deleted
+          headers:
+            X-FTR-Case-Id:
+              $ref: "#/components/headers/X-FTR-Case-Id"
+            X-FTR-Correlation-Id:
+              $ref: "#/components/headers/X-FTR-Correlation-Id"
+            X-FTR-Request-Id:
+              $ref: "#/components/headers/X-FTR-Request-Id"
+            X-FTR-Session-Id:
+              $ref: "#/components/headers/X-FTR-Session-Id"
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+    parameters:
+      - name: id
+        schema:
+          type: string
+        description: Identifier of the Listener
+        in: path
+        required: true
+  /listener/processFlowEvents:
+    post:
+      tags:
+        - Notification listeners (client side)
+      summary: Client listener for ProcessFlow Events
+      description: Example of a client listener for receiving the notification from
+        ProcessFlow domain
+      operationId: processFlowNotificationListener
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      requestBody:
+        required: true
+        description: The event data
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcessFlowNotificationEvent"
+      responses:
+        "201":
+          description: Created
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+  /listener/taskFlowEvents:
+    post:
+      tags:
+        - Notification listeners (client side)
+      summary: Client listener for TaskFlow Events
+      description: Example of a client listener for receiving the notification from
+        TaskFlow domain
+      operationId: taskFlowNotificationListener
+      parameters:
+        - $ref: "#/components/parameters/X-FTR-Case-Id"
+        - $ref: "#/components/parameters/X-FTR-Correlation-Id"
+        - $ref: "#/components/parameters/X-FTR-Session-Id"
+        - $ref: "#/components/parameters/fields"
+        - $ref: "#/components/parameters/clientVersion"
+        - $ref: "#/components/parameters/realIP"
+        - $ref: "#/components/parameters/requestId"
+        - $ref: "#/components/parameters/requestTrackingId"
+        - $ref: "#/components/parameters/requestSessionId"
+        - $ref: "#/components/parameters/Date"
+        - $ref: "#/components/parameters/Accept"
+        - $ref: "#/components/parameters/X-Server-Authentication"
+        - $ref: "#/components/parameters/Content-Length"
+      requestBody:
+        required: true
+        description: The event data
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskFlowNotificationEvent"
+      responses:
+        "201":
+          description: Created
+          headers:
+            X-Request-Id:
+              $ref: "#/components/headers/X-Request-Id"
+            X-Request-Tracking-Id:
+              $ref: "#/components/headers/X-Request-Tracking-Id"
+            X-Request-Session-Id:
+              $ref: "#/components/headers/X-Request-Session-Id"
+            Date:
+              $ref: "#/components/headers/Date"
+            Content-Length:
+              $ref: "#/components/headers/Content-Length"
+        "207":
+          $ref: "#/components/responses/207"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "408":
+          $ref: "#/components/responses/408"
+        "409":
+          $ref: "#/components/responses/409"
+        "422":
+          $ref: "#/components/responses/422"
+        "429":
+          $ref: "#/components/responses/429"
+        "500":
+          $ref: "#/components/responses/500"
+        "501":
+          $ref: "#/components/responses/501"
+        "504":
+          $ref: "#/components/responses/504"
+components:
+  securitySchemes:
+    accessTokenJWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Access token in JWT format sent in HTTP Authorization header,
+        Bearer schema
+    accessTokenOpaque:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+      description: Access token in opaque format sent in HTTP Authorization header,
+        Bearer schema
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key for technical accounts (opaque format) sent in HTTP
+        Authorization header, no schema
+  headers:
+    X-Request-Id:
+      required: false
+      style: simple
+      description: Request-response header used to send span id.Listed for backward
+        compatibility (SpanID).
+      schema:
+        type: string
+        description: Span id trace header
+      example: 6e7a118a-0647-4596-b2bf-b06e4236c3b3
+    X-Request-Tracking-Id:
+      required: false
+      style: simple
+      description: Request-response header used to send trace id. Listed for backward
+        compatibility (TraceID).
+      schema:
+        type: string
+        description: Trace id trace header
+      example: f91db0e2-3af3-455f-8f53-883685592f65
+    X-Request-Session-Id:
+      required: false
+      style: simple
+      description: Request-response header used to send session id of current request.
+        Listed for backward compatibility.
+      schema:
+        type: string
+      example: de0bdbdf-f62c-48fa-97d4-b4492d688242
+    X-Content-Range:
+      required: true
+      style: simple
+      description: Response header that returns paging info in format
+        {page}/{limit}/{results}|*
+      schema:
+        type: string
+        pattern: ^([0-9]+)\/([1-9][0-9]*)\/(([0-9]*)|\*)$
+      examples:
+        totalResultsKnown:
+          description: Value when total number of results is known
+          value: 0/20/42
+        totalResultsUnknown:
+          description: Value when total number of results is not known
+          value: 0/20/*
+    Date:
+      required: false
+      style: simple
+      description: The Date general HTTP header contains the date and time at which
+        the message was originated.
+      schema:
+        type: string
+        externalDocs:
+          description: MDN description of Date header
+          url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
+      example: Wed, 21 Oct 2015 07:28:00 GMT
+    Content-Length:
+      required: false
+      style: simple
+      description: The Content-Length header indicates the size of the message body,
+        in bytes, sent to the recipient.
+      schema:
+        type: integer
+        minimum: 0
+        externalDocs:
+          description: MDN description of Content-Length header
+          url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
+      example: 123
+    X-FTR-Case-Id:
+      required: false
+      style: simple
+      description: FTR specific header
+      schema:
+        type: string
+      example: 1.2:abcdabcd-1234-abcd-1234-1234abcd1234
+    X-FTR-Correlation-Id:
+      required: false
+      style: simple
+      description: FTR specific header
+      schema:
+        type: string
+      example: 5d2736e2-1944-4ae1-b31e-31af43f322e8
+    X-FTR-Request-Id:
+      required: false
+      style: simple
+      description: FTR specific header
+      schema:
+        type: string
+      example: 5bcca6a0-7ca4-4258-826c-2b4451cdcee7
+    X-FTR-Session-Id:
+      required: false
+      style: simple
+      description: FTR specific header
+      schema:
+        type: string
+      example: a79d1310-3653-4341-b569-d6ead09d61ef
+  parameters:
+    fields:
+      in: query
+      allowEmptyValue: true
+      name: fields
+      schema:
+        type: string
+        default: "*"
+        externalDocs:
+          description: fields command description
+          url: https://confluence.dtoneapp.telekom.net/display/HAL/Resource+query+language
+      required: false
+      description: List of fields returned in response
+    fieldsPatch:
+      in: query
+      allowEmptyValue: false
+      name: fields
+      schema:
+        type: string
+        externalDocs:
+          description: fields command description
+          url: https://confluence.dtoneapp.telekom.net/display/HAL/Resource+query+language
+      required: false
+      description: List of fields that needs to be changed in PATCH method
+    query:
+      in: query
+      allowEmptyValue: false
+      name: query
+      schema:
+        type: string
+        externalDocs:
+          description: RQL description
+          url: https://confluence.dtoneapp.telekom.net/display/HAL/Resource+query+language
+      required: false
+      description: RQL command
+    page:
+      in: query
+      allowEmptyValue: false
+      name: page
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      required: false
+      description: Page, positive integer, starts with 0
+    size:
+      in: query
+      allowEmptyValue: false
+      name: size
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      required: false
+      description: Page size, positive integer greater than 0
+    sort:
+      in: query
+      allowEmptyValue: false
+      name: sort
+      schema:
+        type: string
+      required: false
+      example: validFor.startDateTime,-id
+      description: data sort parameter, starts with "+" or "-" prefix; when prefix
+        empty, "+" is default; multiple attributes can be used separated by ","
+    clientVersion:
+      in: header
+      name: X-Client-Version
+      schema:
+        type: string
+      required: false
+      description: Request header used to send client version
+      example: 2.8.4
+    postMethodOverride:
+      in: header
+      name: X-HTTP-Method-Override
+      schema:
+        type: string
+        enum:
+          - GET
+        default: GET
+      required: true
+      description: Request header that contains HTTP Method verb override. Commonly
+        used when GET functionality is being invoked over POST Method.
+    realIP:
+      in: header
+      name: X-Real-IP
+      schema:
+        type: string
+      required: false
+      description: Request header used to send client IP address
+      example: 192.168.1.4
+    requestId:
+      in: header
+      name: X-Request-Id
+      required: false
+      style: simple
+      description: Request-response header used to send span id.Listed for backward
+        compatibility (SpanID).
+      schema:
+        type: string
+        description: Span id trace header
+      example: 6e7a118a-0647-4596-b2bf-b06e4236c3b3
+    requestTrackingId:
+      in: header
+      name: X-Request-Tracking-Id
+      required: false
+      style: simple
+      description: Request-response header used to send trace id. Listed for backward
+        compatibility (TraceID).
+      schema:
+        type: string
+        description: Trace id trace header
+      example: f91db0e2-3af3-455f-8f53-883685592f65
+    requestSessionId:
+      in: header
+      name: X-Request-Session-Id
+      required: false
+      style: simple
+      description: Request-response header used to send session id of current request.
+        Listed for backward compatibility.
+      schema:
+        type: string
+      example: de0bdbdf-f62c-48fa-97d4-b4492d688242
+    Date:
+      in: header
+      name: Date
+      schema:
+        type: string
+        externalDocs:
+          description: MDN description of Date header
+          url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Date
+      required: false
+      description: The Date general HTTP header contains the date and time at which
+        the message was originated.
+      example: Wed, 21 Oct 2015 07:28:00 GMT
+    Accept:
+      in: header
+      name: Accept
+      schema:
+        type: string
+        externalDocs:
+          description: MDN description of Accept header
+          url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
+      required: false
+      description: "The Accept request HTTP header advertises which content types,
+        expressed as MIME types, the client is able to understand. Using content
+        negotiation, the server then selects one of the proposals, uses it and
+        informs the client of its choice with the Content-Type response header.
+        Browsers set adequate values for this header depending on the context
+        where the request is done: when fetching a CSS stylesheet a different
+        value is set for the request than when fetching an image, video or a
+        script."
+      example: application/json
+    Content-Length:
+      in: header
+      name: Content-Length
+      schema:
+        type: integer
+        minimum: 0
+        externalDocs:
+          description: MDN description of Content-Length header
+          url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Length
+      required: false
+      description: The Content-Length header indicates the size of the message body,
+        in bytes, sent to the recipient.
+      example: 123
+    X-Server-Authentication:
+      in: header
+      name: X-Server-Authentication
+      schema:
+        type: string
+      required: false
+      description: Authentication header used to transport server apiKey or
+        accessToken (opaque or JWT format).
+      example: Bearer
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    X-FTR-Case-Id:
+      in: header
+      name: X-FTR-Case-Id
+      schema:
+        type: string
+      required: false
+      description: FTR specific header
+      example: 1.2:abcdabcd-1234-abcd-1234-1234abcd1234
+    X-FTR-Correlation-Id:
+      in: header
+      name: X-FTR-Correlation-Id
+      schema:
+        type: string
+      required: false
+      description: FTR specific header
+      example: 5d2736e2-1944-4ae1-b31e-31af43f322e8
+    X-FTR-Request-Id:
+      in: header
+      name: X-FTR-Request-Id
+      schema:
+        type: string
+      required: false
+      description: FTR specific header
+      example: 5bcca6a0-7ca4-4258-826c-2b4451cdcee7
+    X-FTR-Session-Id:
+      in: header
+      name: X-FTR-Session-Id
+      schema:
+        type: string
+      required: false
+      description: FTR specific header
+      example: a79d1310-3653-4341-b569-d6ead09d61ef
+  schemas:
+    APIError:
+      title: APIError
+      type: object
+      description: Default error message template
+      required:
+        - id
+        - code
+        - timestamp
+        - severity
+      externalDocs:
+        url: https://confluence.dtoneapp.telekom.net/display/HAL/Error+Handling
+        description: Confluence page describing Error model
+      properties:
+        id:
+          type: string
+          description: Unique error ID, used for logging purposes, UUID format
+          format: uuid
+        code:
+          type: string
+          description: A string coding the error type.
+          externalDocs:
+            url: https://confluence.dtoneapp.telekom.net/display/HAL/Error+code+standardization
+            description: Confluence page describing Error code standardization
+          pattern: ^hal\.(business|technical|security|validation)\..*$
+        timestamp:
+          type: string
+          format: date-time
+          description: Exact time of error in ISO-8601 format.
+          example: 2017-09-11T07:39:58.076+01:00
+        isTitleEnabled:
+          type: boolean
+          default: false
+          description: A boolean that provides info will title be shown.
+        title:
+          type: string
+          format: html
+          description: A short localized string naming error message, used for error
+            presentation.
+        htmlLabel:
+          type: string
+          format: html
+          description: A short localized string with HTML support used for error
+            presentation. If populated, overrides text sent in label field
+        label:
+          type: string
+          description: A short localized string used for error presentation. If populated,
+            overrides text sent in message field
+        message:
+          type: string
+          format: html
+          description: A localized string used for describing error message details for
+            operations team.
+        retryable:
+          type: boolean
+          default: false
+          description: A boolean that provides info is request retryable for this
+            particular error. Retryable means that if client sends same request,
+            different result can be returned. Example of this is temporary
+            backend server unavailability.
+        severity:
+          type: string
+          description: >-
+            Error severity levels, where FATAL is highest and TRACE is lowest.
+             * `FATAL` - Designates very severe error events that will presumably lead the application to abort.
+             * `ERROR` - Designates error events that might still allow the application to continue running.
+             * `WARN` - Designates potentially harmful situations.
+             * `INFO` - Designates informational messages that highlight the progress of the application at coarse-grained level.
+             * `DEBUG` - Designates fine-grained informational events that are most useful to debug an application.
+             * `TRACE` - Designates finer-grained informational events than the DEBUG.
+          enum:
+            - FATAL
+            - ERROR
+            - WARN
+            - INFO
+            - DEBUG
+            - TRACE
+        details:
+          $ref: "#/components/schemas/Any"
+    Any:
+      title: Any
+      description: "Generic JSON value that can contain any JSON type: null, boolean,
+        string, number, object, array."
+      oneOf:
+        - type: string
+          nullable: true
+        - type: number
+          nullable: true
+        - type: boolean
+          nullable: true
+        - type: object
+          nullable: true
+        - type: array
+          items:
+            $ref: "#/components/schemas/Any"
+          nullable: true
+    Characteristic:
+      type: object
+      required:
+        - name
+      title: Characteristic
+      description: Characteristic of an resource.
+      properties:
+        entityType:
+          type: string
+          description: Indicates the overloaded type of the resource.
+        entityBaseType:
+          type: string
+          description: Indicates the base type of the resource.
+        entitySchemaLocation:
+          type: string
+          description: URL that indicates schema location of the resource.
+        entityId:
+          type: string
+          description: Indicates the ident of overloaded type of the resource
+        name:
+          type: string
+          description: Characteristic name.
+        valueType:
+          type: string
+          description: >-
+            Possible types for value fields. When certain type is selected, than
+            corresponding value field should be populated and other fields MUST
+            be ignored.
+             * `string` - value field is populated
+             * `boolean` - booleanValue field is populated
+             * `number` - numberValue field is populated
+             * `object` - objectValue field is populated
+             * `array` - arrayValue field is populated
+          enum:
+            - string
+            - boolean
+            - number
+            - object
+            - array
+          default: string
+        value:
+          type: string
+          nullable: true
+          description: Characteristic value of type string. Value type is considered
+            string to be backward compatible.
+        numberValue:
+          type: number
+          nullable: true
+          description: Characteristic value of type number.
+        booleanValue:
+          type: boolean
+          nullable: true
+          description: Characteristic value of type boolean.
+        objectValue:
+          type: object
+          nullable: true
+          description: Characteristic value of type object.
+        arrayValue:
+          type: array
+          nullable: true
+          description: Characteristic value of type array.
+          items:
+            $ref: "#/components/schemas/Any"
+        label:
+          type: string
+          description: Characteristic label, used for screen presentations.
+        description:
+          type: string
+          description: Description of the Entity.
+        configurable:
+          type: boolean
+          description: If true, the Boolean indicates that the Characteristic is
+            configurable.
+        isCustomerVisible:
+          type: boolean
+          description: If true, the Boolean indicates that the Characteristic is visible
+            to the customer.
+    TimePeriod:
+      type: object
+      title: TimePeriod
+      description: Entity describing beginning and end of a specific time period
+      properties:
+        startDateTime:
+          type: string
+          format: date-time
+          description: Beginning of the time period
+          example: 2017-09-11T07:39:58.076+01:00
+        endDateTime:
+          type: string
+          format: date-time
+          description: End of the time period. Must be greater than startDateTime.
+          example: 2017-09-12T07:39:58.076+01:00
+    Audit:
+      type: object
+      title: Audit
+      description: Used to provide auditing data.
+      properties:
+        id:
+          type: string
+          description: Audit ID.
+        createdBy:
+          type: string
+          description: User that created the record.
+        createdDate:
+          type: string
+          format: date-time
+          description: Date when the record was created.
+          example: 2017-09-11T07:39:58.076+01:00
+        changedBy:
+          type: string
+          description: User who modified the record
+        changedDate:
+          type: string
+          format: date-time
+          description: Date when the record was modified.
+          example: 2017-09-11T07:39:58.076+01:00
+        entityVersion:
+          type: integer
+          description: Version of record. Starts with 0 on insert and is increased by one
+            on each update. -1 for deleted records.
+          minimum: -1
+        traceId:
+          type: string
+          description: OpenTracing Trace ID of the change
+        spanId:
+          type: string
+          description: OpenTracing Span Id of the change
+        changeReason:
+          type: string
+          description: Reason why the change was made.
+        sourceSystem:
+          type: string
+          description: Source system that initiated change.
+        sourceSystemUser:
+          type: string
+          description: Source system User that initiated change.
+        characteristics:
+          type: array
+          description: Additional entity descriptors.
+          items:
+            $ref: "#/components/schemas/Characteristic"
+    RelatedParty:
+      type: object
+      title: RelatedParty
+      description: Related Entity reference. A related party defines party or party
+        role linked to a specific entity.
+      required:
+        - referredEntityType
+        - id
+      properties:
+        referredEntityType:
+          type: string
+          description: |-
+            Indicates the overloaded type of a related Party.
+             * `Party` - Referred entity is of type Party
+             * `ContactParty` - Referred entity is of type ContactParty
+             * `Profile` - Referred entity is of type Profile
+             * `Customer` - Referred entity is of type Customer
+          enum:
+            - Party
+            - ContactParty
+            - Profile
+            - Customer
+        referredEntityBaseType:
+          type: string
+          description: |-
+            Indicates the overloaded base type of a related Party.
+             * `Party` - Referred entity is of base type Party
+             * `Profile` - Referred entity is of base type Profile
+             * `Customer` - Referred entity is of base type Customer
+          enum:
+            - Party
+            - Profile
+            - Customer
+        referredEntitySchemaLocation:
+          type: string
+          format: uri
+          description: URI that indicates schema location of the resource.
+        id:
+          type: string
+          description: Unique identifier of a related party.
+        href:
+          type: string
+          description: Reference of the related party.
+        name:
+          type: string
+          description: Name of the related party.
+        version:
+          type: string
+          description: Version of the related Party.
+        role:
+          type: string
+          description: The role of related Party toward parent.
+        parentRole:
+          type: string
+          description: The role of parent toward related Party.
+    RelatedEntity:
+      type: object
+      title: RelatedEntity
+      description: A reference to an entity, where the type of the entity is not known
+        in advance.
+      required:
+        - referredEntityType
+        - id
+      properties:
+        referredEntityType:
+          type: string
+          description: Indicates the overloaded type of a related entity.
+        referredEntityBaseType:
+          type: string
+          description: Indicates the base type of a related entity.
+        referredEntitySchemaLocation:
+          type: string
+          format: uri
+          description: URI that indicates schema location of the resource.
+        id:
+          type: string
+          description: Unique identifier of a related entity.
+        href:
+          type: string
+          description: Reference of the related entity.
+        name:
+          type: string
+          description: Name of the related entity.
+        version:
+          type: string
+          description: Version of the related entity.
+        role:
+          type: string
+          description: The role of related Entity toward parent.
+        parentRole:
+          type: string
+          description: The role of parent toward related Entity.
+    TaskFlowRelationship:
+      type: object
+      title: TaskFlowRelationship
+      description: Structured textual way of describing relationships between two TaskFlows
+      required:
+        - relationshipType
+        - taskFlowRef
+      properties:
+        entityType:
+          type: string
+          description: Indicates the overloaded type of the resource
+        entityBaseType:
+          type: string
+          description: |-
+            Indicates the base type of the resource
+             * `TaskFlow` - TaskFlow entity
+          enum:
+            - TaskFlow
+          default: TaskFlow
+        entitySchemaLocation:
+          type: string
+          format: uri
+          description: URI that indicates schema location of the resource.
+        relationshipType:
+          type: string
+          description: |-
+            Used to indicate event type
+             * `nextTask` - Task followed after parent Task
+             * `previousTask` - Task executed before parent Task
+          enum:
+            - nextTask
+            - previousTask
+        taskFlowRef:
+          $ref: "#/components/schemas/Reference"
+    TaskFlow:
+      type: object
+      title: TaskFlow
+      properties:
+        entityType:
+          type: string
+          description: Indicates the overloaded type of the resource
+        entityBaseType:
+          type: string
+          description: |-
+            Indicates the base type of the resource
+             * `TaskFlow` - TaskFLow entity
+          enum:
+            - TaskFlow
+          default: TaskFlow
+        entitySchemaLocation:
+          type: string
+          format: uri
+          description: URI that indicates schema location of the resource.
+        id:
+          type: string
+          readOnly: true
+          description: Identifier of the TaskFlow
+        href:
+          type: string
+          description: Reference of the TaskFlow
+        completionMethod:
+          type: string
+          description: TaskFlow completion method
+        isMandatory:
+          type: boolean
+          description: Indicates mandatory TaskFlow
+        priority:
+          type: integer
+          description: TaskFlow priority. Higher number means higher priority
+        taskFlowDate:
+          type: string
+          format: date-time
+          description: Timestamp of TaskFlow creation
+        parentProcessFlowRef:
+          description: Reference towards ProcessFlow that is parent of this TaskFlow
+          $ref: "#/components/schemas/Reference"
+        taskFlowSpecificationRef:
+          description: Specification reference of the TaskFlow.
+          $ref: "#/components/schemas/VersionReference"
+        state:
+          type: string
+          description: |-
+            Used to indicate state machine diagram of the TaskFlow
+             * `new` - TaskFlow is created, but not started
+             * `active` - TaskFlow is active
+             * `hold` - TaskFlow is missing information
+             * `cancelled` - TaskFlow is cancelled
+             * `completed` - TaskFlow is completed
+          enum:
+            - new
+            - active
+            - hold
+            - cancelled
+            - completed
+        taskFlowRelationships:
+          type: array
+          description: A list of TaskFlows related to this TaskFlow
+          items:
+            $ref: "#/components/schemas/TaskFlowRelationship"
+        channelRefs:
+          type: array
+          description: A list of channel(s) where this TaskFlow is executed
+          items:
+            $ref: "#/components/schemas/Reference"
+        characteristics:
+          type: array
+          description: A list of characteristic(s) associated to this TaskFlow
+          items:
+            $ref: "#/components/schemas/Characteristic"
+        relatedEntities:
+          type: array
+          description: A list of related entity(ies) to this TaskFlow
+          items:
+            $ref: "#/components/schemas/RelatedEntity"
+        relatedParties:
+          type: array
+          description: A list of related party(ies) to this TaskFlow
+          items:
+            $ref: "#/components/schemas/RelatedParty"
+        validFor:
+          $ref: "#/components/schemas/TimePeriod"
+        audit:
+          $ref: "#/components/schemas/Audit"
+    ProcessFlow:
+      type: object
+      title: ProcessFlow
+      properties:
+        entityType:
+          type: string
+          description: Indicates the overloaded type of the resource
+        entityBaseType:
+          type: string
+          description: |-
+            Indicates the base type of the resource
+             * `ProcessFlow` - ProcessFlow entity
+          enum:
+            - ProcessFlow
+          default: ProcessFlow
+        entitySchemaLocation:
+          type: string
+          format: uri
+          description: URI that indicates schema location of the resource.
+        id:
+          type: string
+          readOnly: true
+          description: Identifier of the ProcessFlow
+        href:
+          type: string
+          description: Reference of the ProcessFlow
+        processFlowDate:
+          type: string
+          format: date-time
+          description: Timestamp when the ProcessFlow was created
+        processFlowSpecificationRef:
+          description: Reference to ProcessFlow Specification
+          $ref: "#/components/schemas/VersionReference"
+        channelRefs:
+          type: array
+          description: A list of channel(s) where this ProcessFlow is executed
+          items:
+            $ref: "#/components/schemas/Reference"
+        characteristics:
+          type: array
+          description: A list of characteristic(s) associated to this ProcessFlow
+          items:
+            $ref: "#/components/schemas/Characteristic"
+        relatedEntities:
+          type: array
+          description: A list of related entity(ies) to this ProcessFlow
+          items:
+            $ref: "#/components/schemas/RelatedEntity"
+        relatedParties:
+          type: array
+          description: A list of related party(ies) to this ProcessFlow
+          items:
+            $ref: "#/components/schemas/RelatedParty"
+        state:
+          type: string
+          description: |-
+            Used to indicate the current lifecycle status of the ProcessFlow
+             * `active` - ProcessFlow is active
+             * `cancelled` - ProcessFlow is cancelled
+             * `hold` - ProcessFlow is held, and awaits for missing information
+             * `completed` - ProcessFlow is completed
+          enum:
+            - active
+            - cancelled
+            - hold
+            - completed
+        taskFlows:
+          type: array
+          description: A list of TaskFlows related to this ProcessFlow
+          items:
+            $ref: "#/components/schemas/Reference"
+        validFor:
+          $ref: "#/components/schemas/TimePeriod"
+        audit:
+          $ref: "#/components/schemas/Audit"
+    Reference:
+      type: object
+      title: Reference
+      description: Generic reference to another resource
+      required:
+        - id
+      properties:
+        referredEntityType:
+          type: string
+          description: Indicates the overloaded type of reference.
+        referredEntityBaseType:
+          type: string
+          description: Indicates the base type of reference.
+        referredEntitySchemaLocation:
+          type: string
+          format: uri
+          description: URI that indicates schema location of the resource.
+        id:
+          type: string
+          description: Unique identifier
+        href:
+          type: string
+          description: Hypertext reference
+        name:
+          type: string
+          description: Name of the Reference
+    VersionReference:
+      type: object
+      title: VersionReference
+      description: Generic link to another versioned resource
+      required:
+        - id
+      properties:
+        referredEntityType:
+          type: string
+          description: Indicates the overloaded type of a related entity.
+        referredEntityBaseType:
+          type: string
+          description: Indicates the base type of a related entity.
+        referredEntitySchemaLocation:
+          type: string
+          format: uri
+          description: URL that indicates schema location a related entity.
+        id:
+          type: string
+          description: Unique identifier
+        href:
+          type: string
+          description: Hypertext reference
+        name:
+          type: string
+          description: Name of the Reference
+        version:
+          type: string
+          description: Version of the Reference
+    Hub:
+      type: object
+      title: Hub
+      required:
+        - callback
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: Identifier of the Listener
+        callback:
+          type: string
+          format: uri
+          description: The callback being registered
+        query:
+          type: string
+          description: additional data to be passed
+        characteristics:
+          type: array
+          description: Additional entity descriptors.
+          items:
+            $ref: "#/components/schemas/Characteristic"
+    ProcessFlowNotificationEvent:
+      type: object
+      title: ProcessFlowNotificationEvent
+      description: Data structure for ProcessFlow events
+      required:
+        - eventId
+        - eventTime
+        - domain
+        - eventType
+        - event
+      properties:
+        eventId:
+          type: string
+          description: The unique identifier of the event
+        eventTime:
+          type: string
+          format: date-time
+          description: Time of the event occurrence
+        domain:
+          type: string
+          description: |-
+            Used to indicate domain to which event is linked to
+             * `ProcessFlow` - Event published on ProcessFlow domain
+          enum:
+            - ProcessFlow
+          default: ProcessFlow
+        eventType:
+          type: string
+          description: >-
+            Used to indicate event type
+             * `ProcessFlowCreateEvent` - Event published on creation of ProcessFlow
+             * `ProcessFlowStateChangeEvent` - Event published on ProcessFlow state change
+             * `ProcessFlowDeleteEvent` - Event published on ProcessFlow deletion
+             * `ProcessFlowAttributeValueChangeEvent` - Event published on ProcessFlow attribute value change
+          enum:
+            - ProcessFlowCreateEvent
+            - ProcessFlowStateChangeEvent
+            - ProcessFlowDeleteEvent
+            - ProcessFlowAttributeValueChangeEvent
+        correlationId:
+          type: string
+          description: The correlation id for this event
+        event:
+          $ref: "#/components/schemas/ProcessFlowNotificationEventPayload"
+    ProcessFlowNotificationEventPayload:
+      type: object
+      title: ProcessFlowNotificationEventPayload
+      description: Event payload
+      required:
+        - processFlow
+      properties:
+        processFlow:
+          $ref: "#/components/schemas/ProcessFlow"
+    TaskFlowNotificationEvent:
+      type: object
+      title: TaskFlowNotificationEvent
+      description: "Data structure for ProcessFlow and TaskFlow events "
+      required:
+        - eventId
+        - eventTime
+        - domain
+        - eventType
+        - event
+      properties:
+        eventId:
+          type: string
+          description: The unique identifier of the event
+        eventTime:
+          type: string
+          format: date-time
+          description: Time of the event occurrence
+        domain:
+          type: string
+          description: |-
+            Used to indicate domain to which event is linked to
+             * `TaskFlow` - Event published on TaskFlow domain
+          enum:
+            - TaskFlow
+          default: TaskFlow
+        eventType:
+          type: string
+          description: >-
+            Used to indicate event type
+             * `TaskFlowCreateEvent` - Event published on creation of TaskFlow
+             * `TaskFlowStateChangeEvent` - Event published on TaskFlow state change
+             * `TaskFlowDeleteEvent` - Event published on TaskFlow deletion
+             * `TaskFlowAttributeValueChangeEvent` - Event published on TaskFlow attribute value change
+             * `TaskFlowInformationRequiredEvent` - Event published on TaskFlow information missing state
+          enum:
+            - TaskFlowCreateEvent
+            - TaskFlowStateChangeEvent
+            - TaskFlowDeleteEvent
+            - TaskFlowAttributeValueChangeEvent
+            - TaskFlowInformationRequiredEvent
+        correlationId:
+          type: string
+          description: The correlation id for this event
+        event:
+          $ref: "#/components/schemas/TaskFlowNotificationEventPayload"
+    TaskFlowNotificationEventPayload:
+      type: object
+      title: TaskFlowNotificationEventPayload
+      description: Event payload
+      required:
+        - taskFlow
+      properties:
+        taskFlow:
+          $ref: "#/components/schemas/TaskFlow"
+    NotificationData:
+      title: NotificationData
+      type: object
+      description: Definition of property notificationData
+      required:
+        - caseId
+        - sessionId
+        - validationResult
+        - repairState
+        - repairStep
+        - repairInfos
+      properties:
+        caseId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: 1.2:abcdabcd-1234-abcd-1234-1234abcd1234
+        sessionId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: sid-12341234-abcd-1234-abcd-abcd1234abcd
+        validationResult:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: AUTO_VALIDATED_OK
+        repairState:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: FINISH
+        repairStep:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: PRECONDITION_PROFESSIONAL
+        findingObject:
+          $ref: "#/components/schemas/FindingObject"
+        repairInfos:
+          $ref: "#/components/schemas/RepairInfos"
+    RepairInfos:
+      title: RepairInfos
+      type: object
+      required:
+        - repairInfo
+      properties:
+        repairInfo:
+          type: array
+          description: ...
+          items:
+            $ref: "#/components/schemas/RepairInfoItem"
+    RepairInfoItem:
+      title: RepairInfoItem
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: Status Router
+          description: ...
+        value:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: online
+          description: ...
+        type:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: STR
+          description: "possible values t.b.d. "
+        evaluation:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: GREEN
+          description: possible values are RED, YELLOW, GREEN
+    FindingObject:
+      title: FindingObject
+      type: object
+      description: ...
+      required:
+        - findingKey
+      properties:
+        findingKey:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: P__REMOTE_VORHANDEN__REMOTEZUSTIMMUNG_FEHLT
+        inputParam:
+          $ref: "#/components/schemas/InputParam"
+        finding:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: Die Remotezustimmung für diese Aktion liegt noch nicht vor.
+        method:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: ...
+          example: Kein Text (Vorgehensweise)
+        hint:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: Kein Beispieltext (Hinweistext)
+        desc:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: Kein Bespieltext (Beschreibung)
+        additionalInfo:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          description: ...
+          example: Kein Bespieltext (Beschreibung)
+    InputParam:
+      title: InputParam
+      type: object
+      required:
+        - inputParamItem
+      properties:
+        inputParamItem:
+          type: array
+          description: Array of Input Parameters consisting of objects
+          items:
+            $ref: "#/components/schemas/InputParamItem"
+    InputParamItem:
+      title: InputParamItem
+      type: object
+      description: object defines the necessary Information for the Input Form
+      required:
+        - formId
+        - questionLabel
+      properties:
+        formId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: "FormID is necessary to map the answer to the respective question.
+            If this value starts with *selectOne* or *selectMany* the attribute
+            *answer* must provide the possible answers "
+          example: selectOne_1
+        questionLabel:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Question text depending on userGroup
+          example: Fragen Sie den Kunden, ob er mit dem Fernzugriff einverstanden ist.
+        required:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: value x means Input is required, else Input is not required
+          example: x
+        answer:
+          $ref: "#/components/schemas/Answer"
+        regex:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: Regex String for Validation of TextInput
+          example: ...
+    Answer:
+      title: Answer
+      type: object
+      description: Possible answers for forms of type *selectOne* or *selectMany*
+      required:
+        - answerItem
+      properties:
+        answerItem:
+          type: array
+          description: Array of possible answers depending on userGroup
+          items:
+            $ref: "#/components/schemas/AnswerItem"
+    AnswerItem:
+      title: AnswerItem
+      type: object
+      required:
+        - number
+        - value
+        - label
+      properties:
+        number:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: "1"
+        value:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: ...
+          example: "true"
+        label:
+          type: string
+          minLength: 1
+          maxLength: 512
+          description: ...
+          example: Ja
+    NotificationRequest:
+      title: NotificationRequest
+      type: object
+      description: Callback Data from the nba api to be used for both Repair Start
+        Notification and Repair Resume Notification   <br>More than one callback
+        possible for the Repair Start Notification or Repair Resume Notification
+        (multiple callbacks).   <br>If repairState in
+        (P_FINDING_ACTIVE,R_FINDING_ACTIVE, V_FINDING_ACTIVE) and findingObject
+        is not null, then user action is requested in form of a Repair Resume
+        Request   <br>If RepairState in (FINISH, FINISH_NO_ACTION), then the
+        Repair is done.
+      properties:
+        type:
+          type: string
+          description: overloaded data type of the event payload
+        schemaLocation:
+          type: string
+          description: location of the schema specification of this datatype
+    RepairStartNotificationRequest:
+      title: RepairStartNotificationRequest
+      type: object
+      description: Specialzation of Callback Data from the nba api to be used for
+        Repair Start Notification
+      properties:
+        notificationData:
+          $ref: "#/components/schemas/NotificationData"
+      allOf:
+        - $ref: "#/components/schemas/NotificationRequest"
+    RepairResumeNotificationRequest:
+      title: RepairResumeNotificationRequest
+      type: object
+      description: Specialzation of Callback Data from the nba api to be used for
+        Repair Start Notification
+      properties:
+        notificationData:
+          $ref: "#/components/schemas/NotificationData"
+      allOf:
+        - $ref: "#/components/schemas/NotificationRequest"
+    NbaDeterminationNotificationRequest:
+      title: NbaDeterminationNotificationRequest
+      type: object
+      description: Specialzation of Callback Data from the nba api to be used for NBA
+        determination.
+      properties:
+        notificationData:
+          $ref: "#/components/schemas/NbaDeterminationNotificationData"
+      allOf:
+        - $ref: "#/components/schemas/NotificationRequest"
+    NbaDeterminationNotificationData:
+      title: NbaDeterminationNotificationData
+      type: object
+      description: Content of notification of type NbaDetermination
+      required:
+        - caseId
+        - sessionId
+        - repairObjects
+      properties:
+        caseId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: 1.2:abcdabcd-1234-abcd-1234-1234abcd1234
+        sessionId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ...
+          example: sid-12341234-abcd-1234-abcd-abcd1234abcd
+        repairObjects:
+          $ref: "#/components/schemas/RepairObjects"
+    RepairObjects:
+      title: RepairObjects
+      type: object
+      required:
+        - repairObject
+      properties:
+        repairObject:
+          type: array
+          description: ...
+          items:
+            $ref: "#/components/schemas/RepairObjectItem"
+    RepairObjectItem:
+      title: RepairObjectItem
+      type: object
+      required:
+        - repairId
+        - rowNumber
+      properties:
+        repairId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: EQUIPMENT__ENSURE_MINIMAL_WIRING
+          description: ...
+        probability:
+          type: string
+          minLength: 1
+          maxLength: 30
+          example: "9.9"
+          description: ...
+        loginLevel:
+          type: integer
+          example: 1
+          description: ...
+        duration:
+          type: integer
+          example: 90
+          description: ...
+        executionMode:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: AUTOMATIC
+          description: ...
+        description:
+          type: string
+          minLength: 1
+          maxLength: 512
+          example: def
+          description: ...
+        onlineHelpUri:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: https://telekom.de/hilfe/article1222
+          description: ...
+        reason:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          example: UNKNOWN
+          description: ...
+        rowNumber:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "1"
+          description: ...
+    JSONPatch:
+      title: JSONPatch
+      type: object
+      description: Default object for RFC6902 as per
+        https://datatracker.ietf.org/doc/html/rfc6902 and
+        https://www.tmforum.org/resources/standard/tmf630-rest-api-design-guidelines-4-2-0/
+        , parts 5 and 6. TMF guidelines are followed (especially Part 6), so
+        path property represents JSON Path and NOT JSON Pointer.
+      discriminator:
+        propertyName: valueType
+        mapping:
+          boolean: "#/components/schemas/BooleanJSONPatch"
+          string: "#/components/schemas/StringJSONPatch"
+          number: "#/components/schemas/NumberJSONPatch"
+          object: "#/components/schemas/ObjectJSONPatch"
+          array: "#/components/schemas/ArrayJSONPatch"
+      oneOf:
+        - $ref: "#/components/schemas/BooleanJSONPatch"
+        - $ref: "#/components/schemas/StringJSONPatch"
+        - $ref: "#/components/schemas/NumberJSONPatch"
+        - $ref: "#/components/schemas/ObjectJSONPatch"
+        - $ref: "#/components/schemas/ArrayJSONPatch"
+    BooleanJSONPatch:
+      title: BooleanJSONPatch
+      type: object
+      description: Boolean value used in add, copy, move, test operations
+      required:
+        - op
+        - path
+      properties:
+        op:
+          type: string
+          description: >-
+            RFC6902 operations
+             * `add` - Adds value to the target location. Value property MUST be defined.
+             * `remove` - Removes the value at the target location.
+             * `replace` - Replaces the value at the target location with a new value. The operation object MUST contain a "value" member whose content specifies the replacement value.Value property MUST be defined.
+             * `move` - The "move" operation removes the value at a specified location and adds it to the target location. From property MUST be defined.
+             * `copy` - The "copy" operation copies the value from the specified location and adds it to the target location. From property MUST be defined.
+             * `test` - The "test" operation tests that a value at the target location is equal to a specified value.Value property MUST be defined
+          enum:
+            - add
+            - remove
+            - replace
+            - move
+            - copy
+            - test
+        from:
+          type: string
+          format: json-path
+          description: JSON Path command to specify source location for copy and move
+            operations
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        path:
+          type: string
+          format: json-path
+          description: JSON Path command to specify target location
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        valueType:
+          type: string
+          description: >-
+            Possible JSON types for value field. Null type is covered by OpenAPI
+            nullable property.
+             * `boolean` - Value is of type boolean.
+          enum:
+            - boolean
+          default: boolean
+        value:
+          type: boolean
+          nullable: true
+    NumberJSONPatch:
+      title: NumberJSONPatch
+      type: object
+      description: Number value used in add, copy, move, test operations
+      required:
+        - op
+        - path
+      properties:
+        op:
+          type: string
+          description: >-
+            RFC6902 operations
+             * `add` - Adds value to the target location. Value property MUST be defined.
+             * `remove` - Removes the value at the target location.
+             * `replace` - Replaces the value at the target location with a new value. The operation object MUST contain a "value" member whose content specifies the replacement value.Value property MUST be defined.
+             * `move` - The "move" operation removes the value at a specified location and adds it to the target location. From property MUST be defined.
+             * `copy` - The "copy" operation copies the value from the specified location and adds it to the target location. From property MUST be defined.
+             * `test` - The "test" operation tests that a value at the target location is equal to a specified value.Value property MUST be defined
+          enum:
+            - add
+            - remove
+            - replace
+            - move
+            - copy
+            - test
+        from:
+          type: string
+          format: json-path
+          description: JSON Path command to specify source location for copy and move
+            operations
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        path:
+          type: string
+          format: json-path
+          description: JSON Path command to specify target location
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        valueType:
+          type: string
+          description: >-
+            Possible JSON types for value field. Null type is covered by OpenAPI
+            nullable property.
+             * `number` - value is of type number. valueSchemaLocation field CAN be defined to additionally describe the value
+          enum:
+            - number
+          default: number
+        valueSchemaLocation:
+          type: string
+          description: Reference to schema (usually found inside same specification) that
+            is used to additionally describe the value
+        value:
+          type: number
+          nullable: true
+    StringJSONPatch:
+      title: StringJSONPatch
+      type: object
+      description: String value used in add, copy, move, test operations
+      required:
+        - op
+        - path
+      properties:
+        op:
+          type: string
+          description: >-
+            RFC6902 operations
+             * `add` - Adds value to the target location. Value property MUST be defined.
+             * `remove` - Removes the value at the target location.
+             * `replace` - Replaces the value at the target location with a new value. The operation object MUST contain a "value" member whose content specifies the replacement value.Value property MUST be defined.
+             * `move` - The "move" operation removes the value at a specified location and adds it to the target location. From property MUST be defined.
+             * `copy` - The "copy" operation copies the value from the specified location and adds it to the target location. From property MUST be defined.
+             * `test` - The "test" operation tests that a value at the target location is equal to a specified value.Value property MUST be defined
+          enum:
+            - add
+            - remove
+            - replace
+            - move
+            - copy
+            - test
+        from:
+          type: string
+          format: json-path
+          description: JSON Path command to specify source location for copy and move
+            operations
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        path:
+          type: string
+          format: json-path
+          description: JSON Path command to specify target location
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        valueType:
+          type: string
+          description: >-
+            Possible JSON types for value field. Null type is covered by OpenAPI
+            nullable property.
+             * `string` - Value is of type string. valueSchemaLocation field CAN be defined to additionally describe the value
+          enum:
+            - string
+          default: string
+        valueSchemaLocation:
+          type: string
+          description: Reference to schema (usually found inside same specification) that
+            is used to additionally describe the value
+        value:
+          type: string
+          nullable: true
+    ArrayJSONPatch:
+      title: ArrayJSONPatch
+      type: object
+      description: Array value used in add, copy, move, test operations
+      required:
+        - op
+        - path
+      properties:
+        op:
+          type: string
+          description: >-
+            RFC6902 operations
+             * `add` - Adds value to the target location. Value property MUST be defined.
+             * `remove` - Removes the value at the target location.
+             * `replace` - Replaces the value at the target location with a new value. The operation object MUST contain a "value" member whose content specifies the replacement value.Value property MUST be defined.
+             * `move` - The "move" operation removes the value at a specified location and adds it to the target location. From property MUST be defined.
+             * `copy` - The "copy" operation copies the value from the specified location and adds it to the target location. From property MUST be defined.
+             * `test` - The "test" operation tests that a value at the target location is equal to a specified value.Value property MUST be defined
+          enum:
+            - add
+            - remove
+            - replace
+            - move
+            - copy
+            - test
+        from:
+          type: string
+          format: json-path
+          description: JSON Path command to specify source location for copy and move
+            operations
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        path:
+          type: string
+          format: json-path
+          description: JSON Path command to specify target location
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        valueType:
+          type: string
+          description: >-
+            Possible JSON types for value field. Null type is covered by OpenAPI
+            nullable property.
+             * `array` - Value is of type array. valueSchemaLocation field CAN be defined to additionally describe the value
+          enum:
+            - array
+          default: array
+        valueSchemaLocation:
+          type: string
+          description: Reference to schema (usually found inside same specification) that
+            is used to additionally describe the value
+        value:
+          type: array
+          items:
+            $ref: "#/components/schemas/JSONPatchArrayItemsSchema"
+          nullable: true
+    JSONPatchArrayItemsSchema:
+      type: object
+      title: JSONPatchArrayItemsSchema
+      anyOf:
+        - $ref: "#/components/schemas/AdditionalInfoValidationSchema"
+        - $ref: "#/components/schemas/Any"
+    ObjectJSONPatch:
+      title: ObjectJSONPatch
+      type: object
+      description: Object value used in add, copy, move, test operations
+      required:
+        - op
+        - path
+      properties:
+        op:
+          type: string
+          description: >-
+            RFC6902 operations
+             * `add` - Adds value to the target location. Value property MUST be defined.
+             * `remove` - Removes the value at the target location.
+             * `replace` - Replaces the value at the target location with a new value. The operation object MUST contain a "value" member whose content specifies the replacement value.Value property MUST be defined.
+             * `move` - The "move" operation removes the value at a specified location and adds it to the target location. From property MUST be defined.
+             * `copy` - The "copy" operation copies the value from the specified location and adds it to the target location. From property MUST be defined.
+             * `test` - The "test" operation tests that a value at the target location is equal to a specified value.Value property MUST be defined
+          enum:
+            - add
+            - remove
+            - replace
+            - move
+            - copy
+            - test
+        from:
+          type: string
+          format: json-path
+          description: JSON Path command to specify source location for copy and move
+            operations
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        path:
+          type: string
+          format: json-path
+          description: JSON Path command to specify target location
+          externalDocs:
+            url: https://github.com/json-path/JsonPath
+            description: Jayway implementation of JSONPath specification
+        valueType:
+          type: string
+          description: >-
+            Possible JSON types for value field. Null type is covered by OpenAPI
+            nullable property.
+             * `object` - Value is of type object. 
+          enum:
+            - object
+          default: object
+        value:
+          type: object
+          anyOf:
+            - $ref: "#/components/schemas/AdditionalInfoValidationSchema"
+            - $ref: "#/components/schemas/Any"
+          nullable: true
+    AdditionalInfoValidationSchema:
+      type: object
+      title: AdditionalInfoValidationSchema
+      description: TODO
+      required:
+        - findingKey
+      properties:
+        findingKey:
+          type: string
+        formId:
+          type: string
+        value:
+          type: string
+  responses:
+    "207":
+      description: Multi Status
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "400":
+      description: Bad format request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "401":
+      description: Not authenticated
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "403":
+      description: Not authorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "404":
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "408":
+      description: Request timeout
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "409":
+      description: Business rules exceptions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "422":
+      description: Business input parameter validation error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "429":
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "500":
+      description: Internal Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "501":
+      description: Not implemented
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
+    "504":
+      description: Backend not available
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/APIError"
+      headers:
+        X-Request-Id:
+          $ref: "#/components/headers/X-Request-Id"
+        X-Request-Tracking-Id:
+          $ref: "#/components/headers/X-Request-Tracking-Id"
+        X-Request-Session-Id:
+          $ref: "#/components/headers/X-Request-Session-Id"
+        Date:
+          $ref: "#/components/headers/Date"
+        Content-Length:
+          $ref: "#/components/headers/Content-Length"
